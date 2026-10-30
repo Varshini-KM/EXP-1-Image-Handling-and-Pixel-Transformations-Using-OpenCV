@@ -1,273 +1,312 @@
-# Image-Handling-and-Pixel-Transformations-Using-OpenCV 
+# Image-Handling-and-Pixel-Transformations-Using-OpenCV
 
-## AIM:
+# AIM:
 Write a Python program using OpenCV that performs the following tasks:
 
-1) Read and Display an Image.  
-2) Adjust the brightness of an image.  
-3) Modify the image contrast.  
-4) Generate a third image using bitwise operations.
+1. Read and Display an Image.
+2. Adjust the brightness of an image.
+3. Modify the image contrast.
+4. Generate a third image using bitwise operations.
 
-## Software Required:
-- Anaconda - Python 3.7
-- Jupyter Notebook (for interactive development and execution)
+# Software Required:
 
-## Algorithm:
-### Step 1:
+* Anaconda - Python 3.7
+* Jupyter Notebook (for interactive development and execution)
+
+# Algorithm:
+Step 1:
 Load an image from your local directory and display it.
 
-### Step 2:
+Step 2:
 Create a matrix of ones (with data type float64) to adjust brightness.
 
-### Step 3:
-Create brighter and darker images by adding and subtracting the matrix from the original image.  
+Step 3:
+Create brighter and darker images by adding and subtracting the matrix from the original image.
 Display the original, brighter, and darker images.
 
-### Step 4:
-Modify the image contrast by creating two higher contrast images using scaling factors of 1.1 and 1.2 (without overflow fix).  
+Step 4:
+Modify the image contrast by creating two higher contrast images using scaling factors of 1.1 and 1.2 (without overflow fix).
 Display the original, lower contrast, and higher contrast images.
 
-### Step 5:
-Split the image (palace.jpg) into B, G, R components and display the channels
+Step 5:
+Split the image (boy.jpg) into B, G, R components and display the channels
 
-## Program Developed By:
-- **Name:** [Your Name Here]  
-- **Register Number:** [Your Register Number Here]
+# Program Developed By:
+Name: Yuuvasri R
 
-  ### Ex. No. 01
+Register Number: 212225230313
 
-#### 1. Read the image ('butterfly.jpg') using OpenCV imread() as a grayscale image.
+# Ex. No. 01
+
+# Program:
+Step1:
+Load an image from your local directory and display it.
 ```python
-img = cv2.imread('butterfly.jpg', cv2.IMREAD_GRAYSCALE)
-```
+import cv2
+import matplotlib.pyplot as plt
 
-#### 2. Print the image width, height & Channel.
-```python
-h, w = img.shape[:2]
-c = 1 if img.ndim == 2 else img.shape[2]
-print('Width:', w, ' Height:', h, ' Channels:', c)
-```
+# Read the image using OpenCV
+img = cv2.imread('butterfly.jpg', cv2.IMREAD_COLOR)
 
-#### 3. Display the image using matplotlib imshow().
-```python
-plt.imshow(img, cmap='gray')
-plt.title('Grayscale Butterfly')
-plt.axis('off')
+# Convert BGR (OpenCV's default) to RGB (Matplotlib's expected color order)
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# Display the image using Matplotlib
+plt.imshow(img_rgb, cmap='viridis')  # You can change 'viridis' to another cmap or use None for RGB images
+plt.title("Original Image")
+plt.axis('off')  # Removes axis ticks and labels
 plt.show()
 ```
 
-#### 4. Save the image as a PNG file using OpenCV imwrite().
-```python
-cv2.imwrite('butterfly.png', img)
-```
+Step2:
+- Draw a line from the top-left to the bottom-right of the image.
+- Draw a circle at the center of the image.
+- Draw a rectangle around a specific region of interest in the image.
+- Add the text "OpenCV Drawing" at the top-left corner of the image.
+Draw a line from the top-left to the bottom-right of the image
 
-#### 5. Read the saved image above as a color image using cv2.cvtColor().
 ```python
-saved = cv2.imread('butterfly.png')                 # loads as 3-channel BGR
-color = cv2.cvtColor(saved, cv2.COLOR_BGR2RGB)   # BGR -> RGB for matplotlib
-```
+# Load the image
+image = cv2.imread('butterfly.jpg') 
 
-#### 6. Display the Colour image using matplotlib imshow() & Print the image width, height & channel.
-```python
-plt.imshow(color)
-plt.title('Colour Image (RGB)')
-plt.axis('off')
-plt.show()
-h, w, c = color.shape
-print('Width:', w, ' Height:', h, ' Channels:', c)
-```
+# Convert BGR (OpenCV's default) to RGB (Matplotlib's expected color order)
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-#### 7. Crop the image to extract any specific (Butterfly alone) object from the image.
-```python
-# the saved PNG is grayscale, so take the crop from the original colour file
-orig = cv2.cvtColor(cv2.imread('butterfly.jpg'), cv2.COLOR_BGR2RGB)
+img_rgb.shape
 
-# Crop the butterfly alone: rows (y) 15-315, columns (x) 5-485
-crop = orig[15:315, 5:485]
-plt.imshow(crop)
-plt.title('Cropped Butterfly')
-plt.axis('off')
+# Draw a line from top-left to bottom-right
+line_img = cv2.line(img_rgb, (0, 0), (493, 356), (255, 0, 0), 2) # cv2.line(image, start_point, end_point, color, thickness)
+
+plt.imshow(line_img, cmap='viridis')  
+plt.title("Image with Line")
+plt.axis('off')  
 plt.show()
 ```
 
-#### 8. Resize the image up by a factor of 2x.
-```python
-big = cv2.resize(crop, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
-plt.imshow(big)
-plt.title('Resized 2x')
-plt.axis('off')
-plt.show()
-print('New size (H, W):', big.shape[:2])
-```
+Draw a circle at the center of the image.
 
-#### 9. Flip the cropped/resized image horizontally. (Butterfly image)
 ```python
-flip = cv2.flip(big, 1)   # 1 = horizontal flip
-plt.imshow(flip)
-plt.title('Flipped Horizontally')
-plt.axis('off')
-plt.show()
-```
+# Load the image
+image = cv2.imread('butterfly.jpg') 
 
-#### 10. Read in the image ('starry.jpg').
-```python
-art = cv2.imread('starry.jpg', cv2.IMREAD_COLOR)
-art = cv2.cvtColor(art, cv2.COLOR_BGR2RGB)
-plt.imshow(art)
-plt.title('Starry Night')
-plt.axis('off')
+# Convert BGR (OpenCV's default) to RGB (Matplotlib's expected color order)
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+img_rgb.shape
+
+circle_img = cv2.circle(img_rgb,(246,178),100,(255,0,0),10) # cv2.circle(image, center, radius, color, thickness)
+
+plt.imshow(circle_img, cmap='viridis')  
+plt.title("Image with Circle")
+plt.axis('off')  
 plt.show()
 ```
 
-#### 11. Add the following text to the bottom of the image (centered on the image):
-```python
-text = 'The Starry Night, Van Gogh, 1889'
-font_face = cv2.FONT_HERSHEY_PLAIN
-scale = 1.6
-thick = 2
-note = art.copy()
-H, W = note.shape[:2]
+Draw a rectangle around  the whole image
 
-# Measure the text so it can be centred
-(tw, th), base = cv2.getTextSize(text, font_face, scale, thick)
-x = (W - tw) // 2          # horizontally centred
-y = H - 18                 # near the bottom
-cv2.putText(note, text, (x, y), font_face, scale, (255, 255, 255), thick, cv2.LINE_AA)
-```
-
-#### 12. Draw a magenta rectangle that encompasses the tall dark tree.
 ```python
-rect_color = (255, 0, 255)   # magenta
-# top-left (x, y) and bottom-right (x, y) enclosing the tall dark tree
-cv2.rectangle(note, (100, 45), (360, 595), rect_color, 3)
-```
+# Load the image
+image = cv2.imread('butterfly.jpg') 
 
-#### 13. Display the final annotated image.
-```python
-plt.figure(figsize=(10, 8))
-plt.imshow(note)
-plt.title('Final Annotated Image')
-plt.axis('off')
+# Convert BGR (OpenCV's default) to RGB (Matplotlib's expected color order)
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+img.shape
+
+# Draw a rectangle around the Whole image
+rectangle_img = cv2.rectangle(img_rgb, (0, 0), (493, 356), (0, 0, 255), 10)  # cv2.rectangle(image, start_point, end_point, color, thickness)
+
+plt.imshow(rectangle_img, cmap='viridis')  
+plt.title("Image with Rectangle")
+plt.axis('off')  
 plt.show()
 ```
 
-#### 14. Read the image ('palace.jpg').
-```python
-palace = cv2.imread('palace.jpg')
-```
+Add the text "OpenCV Drawing" at the top-left corner of the image.
 
-#### 15. Adjust the brightness of the image.
 ```python
-# Create a matrix of ones (with data type float64)
-ones = np.ones(palace.shape, dtype='float64') * 50   # brightness offset = 50
-matrix = ones.astype('uint8')                        # same dtype as the image
-```
+# Load the image
+image = cv2.imread('butterfly.jpg') 
 
-#### 16. Create brighter and darker images.
-```python
-bright = cv2.add(palace, matrix)
-dark = cv2.subtract(palace, matrix)
-```
+# Convert BGR (OpenCV's default) to RGB (Matplotlib's expected color order)
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-#### 17. Display the images (Original Image, Darker Image, Brighter Image).
-```python
-plt.figure(figsize=(15, 4))
-for i, (im, t) in enumerate([(palace, 'Original Image'), (dark, 'Darker Image'), (bright, 'Brighter Image')]):
-    plt.subplot(1, 3, i + 1)
-    plt.imshow(cv2.cvtColor(im, cv2.COLOR_BGR2RGB))
-    plt.title(t)
-    plt.axis('off')
+# Add text to the image
+text_img = cv2.putText(img_rgb, "OpenCV Drawing", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 10)  ## cv2.putText(image, text, position, font, font_scale, color, thickness)
+
+plt.imshow(text_img, cmap='viridis')  
+plt.title("Image with Text")
+plt.axis('off')  
 plt.show()
 ```
 
-#### 18. Modify the image contrast.
+Step3:
+- Convert the image from RGB to HSV and display it.
+- Convert the image from RGB to GRAY and display it.
+- Convert the image from RGB to YCrCb and display it.
+- Convert the HSV image back to RGB and display it.
 ```python
-# Higher contrast using scale factors 1.1 and 1.2 (without overflow fix)
-matrix1 = np.ones(palace.shape, dtype='float64') * 1.1
-matrix2 = np.ones(palace.shape, dtype='float64') * 1.2
-high1 = np.uint8(np.multiply(palace.astype('float64'), matrix1))
-high2 = np.uint8(np.multiply(palace.astype('float64'), matrix2))
+# Load the image
+image = cv2.imread('butterfly.jpg') 
 
-# Lower contrast (scale below 1) for comparison
-matrix0 = np.ones(palace.shape, dtype='float64') * 0.8
-low = np.uint8(np.multiply(palace.astype('float64'), matrix0))
+image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+# Original RGB Image
+plt.imshow(image_rgb)
+plt.title("Original RGB Image")
+plt.axis("off")
+
+# Convert RGB to HSV
+image_hsv = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2HSV)
+
+# HSV Image
+plt.imshow(image_hsv)
+plt.title("HSV Image")
+plt.axis("off")
+
+# Convert RGB to GRAY
+image_gray = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2GRAY)
+
+# Grayscale Image
+plt.imshow(image_gray, cmap='gray')
+plt.title("Grayscale Image")
+plt.axis("off")
+
+# Convert RGB to YCrCb
+image_ycrcb = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2YCrCb)
+
+# YCrCb Image
+plt.imshow(image_ycrcb)
+plt.title("YCrCb Image")
+plt.axis("off")
+
+# Convert HSV back to RGB
+image_hsv_to_rgb = cv2.cvtColor(image_hsv, cv2.COLOR_HSV2RGB)
+
+plt.imshow(image_hsv_to_rgb)
+plt.title("HSV to RGB Image")
+plt.axis("off")
 ```
 
-#### 19. Display the images (Original, Lower Contrast, Higher Contrast).
+Step4:
+- Access and print the value of the pixel at coordinates (100, 100).
+- Modify the color of the pixel at (200, 200) to white.
 ```python
-plt.figure(figsize=(18, 4))
-for i, (im, t) in enumerate([(palace, 'Original'), (low, 'Lower Contrast'), (high1, 'Higher Contrast 1.1'), (high2, 'Higher Contrast 1.2')]):
-    plt.subplot(1, 4, i + 1)
-    plt.imshow(cv2.cvtColor(im, cv2.COLOR_BGR2RGB))
-    plt.title(t)
-    plt.axis('off')
+# Modify a block of pixels (150x150) to white, starting from (200, 200)
+image[200:350, 200:350] = [255, 255, 255]  # Rows: 200-349, Columns: 200-349
+
+# Convert BGR to RGB for displaying with Matplotlib
+image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+# Display the modified image
+plt.imshow(image_rgb)
+plt.title("Image with 150x150 White Block")
+plt.axis("off")
 plt.show()
 ```
 
-#### 20. Split the image (palace.jpg) into the B,G,R components & Display the channels.
+Step5:
+- Resize the original image to half its size and display it.
 ```python
-b, g, r = cv2.split(palace)
-plt.figure(figsize=(15, 4))
-for i, (ch, t) in enumerate([(b, 'Blue'), (g, 'Green'), (r, 'Red')]):
-    plt.subplot(1, 3, i + 1)
-    plt.imshow(ch, cmap='gray')
-    plt.title(t + ' channel')
-    plt.axis('off')
+# Load the image
+image = cv2.imread('butterfly.jpg') 
+
+image.shape
+
+# Resize the image to half its size
+resized_image = cv2.resize(image, (493 // 2, 356 // 2))  # (new_width, new_height)
+
+# Convert BGR to RGB for displaying with Matplotlib
+resized_image_rgb = cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB)
+
+resized_image_rgb.shape
+
+# Display the resized image
+plt.imshow(resized_image_rgb)
+plt.title("Resized Image (Half Size)")
+plt.axis("off")
 plt.show()
 ```
 
-#### 21. Merged the R, G, B , displays along with the original image
+Step6:
+- Crop a region of interest (ROI) from the image (e.g., a 100x100 pixel area starting at (50, 50)) and display it.
 ```python
-merged = cv2.merge((b, g, r))
-plt.figure(figsize=(10, 4))
-plt.subplot(1, 2, 1); plt.imshow(cv2.cvtColor(palace, cv2.COLOR_BGR2RGB)); plt.title('Original'); plt.axis('off')
-plt.subplot(1, 2, 2); plt.imshow(cv2.cvtColor(merged, cv2.COLOR_BGR2RGB)); plt.title('Merged (B, G, R)'); plt.axis('off')
+# Load the image
+image = cv2.imread('butterfly.jpg') 
+
+image.shape
+
+# Crop a 300x300 region starting from (50, 50)
+roi = image[50:350, 50:350]  # Rows: 50-349, Columns: 50-349
+
+# Convert BGR to RGB for displaying with Matplotlib
+roi_rgb = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
+
+# Display the cropped region (ROI)
+plt.imshow(roi_rgb)
+plt.title("Cropped Region of Interest (ROI)")
+plt.axis("off")
 plt.show()
 ```
 
-#### 22. Split the image into the H, S, V components & Display the channels.
+Step7:
+- Flip the original image horizontally and display it.
+- Flip the original image vertically and display it.
 ```python
-hsv = cv2.cvtColor(palace, cv2.COLOR_BGR2HSV)
-hue, sat, val = cv2.split(hsv)
-plt.figure(figsize=(15, 4))
-for i, (ch, t) in enumerate([(hue, 'Hue'), (sat, 'Saturation'), (val, 'Value')]):
-    plt.subplot(1, 3, i + 1)
-    plt.imshow(ch, cmap='gray')
-    plt.title(t + ' channel')
-    plt.axis('off')
-plt.show()
+# Load the image
+image = cv2.imread('butterfly.jpg') 
+
+# Flip the image horizontally (left-right)
+flipped_horizontally = cv2.flip(image, 1)
+
+# Convert BGR to RGB for displaying with Matplotlib
+flipped_horizontally_rgb = cv2.cvtColor(flipped_horizontally, cv2.COLOR_BGR2RGB)
+
+# Horizontal flip
+plt.imshow(flipped_horizontally_rgb)
+plt.title("Flipped Horizontally")
+plt.axis("off")
+
+# Flip the image vertically (up-down)
+flipped_vertically = cv2.flip(image, 0)
+
+# Convert BGR to RGB for displaying with Matplotlib
+flipped_vertically_rgb = cv2.cvtColor(flipped_vertically, cv2.COLOR_BGR2RGB)
+
+# Vertical flip
+plt.imshow(flipped_vertically_rgb)
+plt.title("Flipped Vertically")
+plt.axis("off")
 ```
 
-#### 23. Merged the H, S, V, displays along with original image.
+Step8:
+- Save the final modified image to your local directory.
 ```python
-mergedhsv = cv2.merge((hue, sat, val))
-back = cv2.cvtColor(mergedhsv, cv2.COLOR_HSV2RGB)   # back to RGB so colours display correctly
-plt.figure(figsize=(10, 4))
-plt.subplot(1, 2, 1); plt.imshow(cv2.cvtColor(palace, cv2.COLOR_BGR2RGB)); plt.title('Original'); plt.axis('off')
-plt.subplot(1, 2, 2); plt.imshow(back); plt.title('Merged (H, S, V)'); plt.axis('off')
-plt.show()
+# Save the final modified image to your local directory
+cv2.imwrite('final.jpg', flipped_vertically)
 ```
 
-## Output:
-- **i)** Read and Display an Image.  
+# Output:
+<img width="561" height="442" alt="image" src="https://github.com/user-attachments/assets/b3dcf196-a94f-430e-8e2a-d439ee73bda4" />
+<img width="562" height="437" alt="image" src="https://github.com/user-attachments/assets/c542d33a-998d-4a36-85d9-3a90a43c2e7f" />
+<img width="562" height="446" alt="image" src="https://github.com/user-attachments/assets/f3b3a922-8c81-4ed5-a68b-4843e06c2275" />
+<img width="559" height="440" alt="image" src="https://github.com/user-attachments/assets/318656f4-bdc7-44bd-b461-6a918ded3198" />
+<img width="564" height="428" alt="image" src="https://github.com/user-attachments/assets/46f1fecf-e93c-4f99-aa30-76420f7a85fc" />
+<img width="577" height="436" alt="image" src="https://github.com/user-attachments/assets/4287a6ee-61e4-4246-88c7-8ee16d739aaf" />
+<img width="556" height="433" alt="image" src="https://github.com/user-attachments/assets/1bd46afc-284c-444b-89b2-680be413008c" />
+<img width="564" height="442" alt="image" src="https://github.com/user-attachments/assets/4e27b6fb-99ab-4d50-848a-5096c0b5b1c4" />
+<img width="559" height="437" alt="image" src="https://github.com/user-attachments/assets/7f0a6057-d998-4769-853a-1f486206e4a0" />
+<img width="559" height="439" alt="image" src="https://github.com/user-attachments/assets/e955ec24-eff3-4039-8b1c-7394c3b13eff" />
+<img width="570" height="458" alt="image" src="https://github.com/user-attachments/assets/e1877135-1709-4d8f-8b59-a39f27b23a7b" />
+<img width="566" height="455" alt="image" src="https://github.com/user-attachments/assets/48c23988-f123-42bf-b67c-41dc03c76b58" />
+<img width="418" height="458" alt="image" src="https://github.com/user-attachments/assets/c71342e0-aa65-456e-8a8e-9e2d4a708437" />
+<img width="560" height="436" alt="image" src="https://github.com/user-attachments/assets/fd3d5446-40bd-442a-9b66-b52441ece363" />
+<img width="561" height="437" alt="image" src="https://github.com/user-attachments/assets/5fdb4152-ae20-474a-83b3-506aa6740609" />
 
 
 
 
-- **ii)** Adjust Image Brightness.  
 
 
-
-
-- **iii)** Modify Image Contrast.  
-
-
-
-
-- **iv)** Generate Third Image Using Bitwise Operations.  
-
-
-
-
-## Result:
-Thus, the images were read, displayed, brightness and contrast adjustments were made, and bitwise operations were performed successfully using the Python program.
+# Result:
+Thus, the image was read, displayed, processed and saved successfully using OpenCV in Python.
